@@ -1,0 +1,7 @@
+{
+  "name": "hands-on-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
