@@ -53,7 +53,7 @@ const Tab1: React.FC = () => {
         }
         <IonList>
           {currentItems.map((item: any) => (
-          <Link key={item.login.username} to={`/details/${item.login.username}`}>
+          <Link className="links" key={item.login.username} to={`/details/${item.login.username}`}>
             <IonItem>
                 <IonAvatar slot="start">
                   <img src={item.picture.thumbnail} />
