@@ -1,5 +1,7 @@
 # hands-on-app
 
+![](XfOAsABdkL.gif) 
+
 Mobile hybrid app for Android platform to display contacts and update avatar using camera functionalities with Capaitor, developed on Ionic framework v6.11.0 with redux-thunk for the data layer.
 
 ## API 
