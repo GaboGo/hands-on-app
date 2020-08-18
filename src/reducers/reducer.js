@@ -4,6 +4,7 @@ export default function data(
     state = {
       isFetching: false,
       items: [],
+      currentItems: [],
       currentPage: 1
     },
     action
@@ -16,33 +17,36 @@ export default function data(
       case RECEIVE_DATA:
         return Object.assign({}, state, {
           isFetching: false,
-          items: action.data
+          items: action.data,
+          currentItems: action.data.slice(0,10),
+          currentPage: state.currentPage + 1
         })
       case UPDATE_DATA:
-        let items = state.items;
-        let userIndex = state.items.findIndex(p => p.login.username === action.user.login.username);
+        let currentItems = state.currentItems;
+        let userIndex = state.currentItems.findIndex(p => p.login.username === action.user.login.username);
         if (userIndex >= 0) {
-          const picture = Object.assign({}, state.items[userIndex].picture, {
+          const picture = Object.assign({}, state.currentItems[userIndex].picture, {
             large: action.photo,
             medium: action.photo,
             thumbnail: action.photo
           })
-          items = [
-            ...state.items.slice(0, userIndex),
+          currentItems = [
+            ...state.currentItems.slice(0, userIndex),
             {
-              ...state.items[userIndex],
+              ...state.currentItems[userIndex],
               picture
             },
-            ...state.items.slice(userIndex + 1)
+            ...state.currentItems.slice(userIndex + 1)
           ];
         }
         return {
           ...state,
-          items
+          currentItems
         };
       case SET_CURRENT_PAGE:
         return Object.assign({}, state, {
             currentPage: action.page,
+            currentItems: state.currentItems.concat(action.data)
         })
       default:
         return state

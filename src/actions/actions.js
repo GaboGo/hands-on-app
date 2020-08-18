@@ -6,8 +6,11 @@ export function requestData(flag) {
     return {type: REQUEST_DATA, flag}
 }
 
-export function setCurrentPage(page) {
-    return { type: SET_CURRENT_PAGE, page }
+export function setCurrentPage(page, data) {
+    return { type: SET_CURRENT_PAGE, 
+      page,
+      data
+    }
 }
   
 export function receiveData(json) {

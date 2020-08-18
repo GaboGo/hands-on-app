@@ -34,8 +34,8 @@ import {
     const { photos, takePhoto } = usePhotoGallery();
     const state = useSelector((state: any) => state);
     const dispatch = useDispatch();
-    const { items } = state.reducer;
-    let user = items.find((user: any) => user.login.username == match.params.userName);
+    const { currentItems } = state.reducer;
+    let user = currentItems.find((user: any) => user.login.username == match.params.userName);
 
     useEffect(() => {
        if(photos.length > 0){

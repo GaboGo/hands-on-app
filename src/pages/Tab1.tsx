@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { IonContent, 
          IonHeader, 
          IonPage, 
@@ -9,18 +9,31 @@ import { IonContent,
          IonList, 
          IonItem,
          IonAvatar,
-         IonLabel 
+         IonLabel,
+         IonInfiniteScroll, 
+         IonInfiniteScrollContent
        } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Tab1.css';
+import { setCurrentPage } from '../actions/actions';
 
 const Tab1: React.FC = () => {
   const state = useSelector((state: any) => state);
-  const { items, isFetching, currentPage } = state.reducer;
+  const dispatch = useDispatch()
+  const { items, currentItems, isFetching, currentPage } = state.reducer;
+  const [disableInfiniteScroll, setDisableInfiniteScroll] = useState<boolean>(false);
+
   
-  useEffect(() => {
-    console.log(items, isFetching, currentPage);
-   },[items, isFetching, currentPage]);
+  function loadNextPage($event: CustomEvent<void>) {
+    const cardsPerPage = 10
+    let indexOfLastCard = currentPage * cardsPerPage
+    let indexOfFirstCard = indexOfLastCard - cardsPerPage
+    let currentCards = items.length > 0 && items.slice(indexOfFirstCard, indexOfLastCard);
+    if(items.length > currentItems.length){
+      dispatch(setCurrentPage(currentPage + 1, currentCards));
+    }
+    ($event.target as HTMLIonInfiniteScrollElement).complete();
+  }
   
   return (
     <IonPage>
@@ -39,7 +52,7 @@ const Tab1: React.FC = () => {
         <ExploreContainer name="Loading.. " />
         }
         <IonList>
-          {items.map((item: any) => (
+          {currentItems.map((item: any) => (
           <Link key={item.login.username} to={`/details/${item.login.username}`}>
             <IonItem>
                 <IonAvatar slot="start">
@@ -49,6 +62,13 @@ const Tab1: React.FC = () => {
             </IonItem>
           </Link>
           ))}
+          <IonInfiniteScroll threshold="15%"
+            disabled={disableInfiniteScroll}
+            onIonInfinite={(e: CustomEvent<void>) => loadNextPage(e)}>
+            <IonInfiniteScrollContent
+                loadingText="Loading more">
+            </IonInfiniteScrollContent>
+        </IonInfiniteScroll>
         </IonList>
       </IonContent>
     </IonPage>

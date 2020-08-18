@@ -1,1 +1,1 @@
-export const ApiUrl = "https://randomuser.me/api/?results=20"
+export const ApiUrl = "https://randomuser.me/api/?results=100"
