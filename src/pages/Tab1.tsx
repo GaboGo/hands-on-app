@@ -17,6 +17,7 @@ import './Tab1.css';
 const Tab1: React.FC = () => {
   const state = useSelector((state: any) => state);
   const { items, isFetching, currentPage } = state.reducer;
+  
   useEffect(() => {
     console.log(items, isFetching, currentPage);
    },[items, isFetching, currentPage]);
@@ -34,7 +35,9 @@ const Tab1: React.FC = () => {
             <IonTitle size="large">Users</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
+        {isFetching &&
+        <ExploreContainer name="Loading.. " />
+        }
         <IonList>
           {items.map((item: any) => (
           <Link key={item.login.username} to={`/details/${item.login.username}`}>

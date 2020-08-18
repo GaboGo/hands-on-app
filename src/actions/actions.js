@@ -1,6 +1,6 @@
 import { ApiUrl } from "../config/config";
 import fetch from 'cross-fetch';
-import { REQUEST_DATA, RECEIVE_DATA, SET_CURRENT_PAGE } from '../constants/constants'
+import { REQUEST_DATA, RECEIVE_DATA, UPDATE_DATA, SET_CURRENT_PAGE } from '../constants/constants'
 
 export function requestData(flag) {
     return {type: REQUEST_DATA, flag}
@@ -15,6 +15,14 @@ export function receiveData(json) {
       type: RECEIVE_DATA,
       data: json.results
     }
+}
+
+export function updateData(user, photo) {
+  return {
+    type: UPDATE_DATA,
+    user,
+    photo
+  }
 }
 
 export function fetchData() {

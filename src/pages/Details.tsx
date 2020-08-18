@@ -12,12 +12,17 @@ import {
     IonCardTitle,
     IonCardContent,
     IonImg,
-    IonLabel,
-    IonBadge
+    IonButton,
+    IonIcon,
+    IonFab,
+    IonFabButton
   } from '@ionic/react';
-  import React from 'react';
-  import { useSelector } from 'react-redux'
+  import { camera, trash, close } from 'ionicons/icons';
+  import { usePhotoGallery } from '../hooks/usePhotoGallery';
+  import React, { useEffect } from 'react';
+  import { useSelector, useDispatch } from 'react-redux'
   import { RouteComponentProps, withRouter } from 'react-router';
+  import { updateData } from '../actions/actions';
 
   type DetailParams = {
     userName: string; // parameters will always be a string (even if they are numerical)
@@ -26,10 +31,20 @@ import {
   type DetailProps = RouteComponentProps<DetailParams>;
 
   const Details: React.FC<DetailProps> = ({match}) => {
-
+    const { photos, takePhoto } = usePhotoGallery();
     const state = useSelector((state: any) => state);
+    const dispatch = useDispatch();
     const { items } = state.reducer;
     let user = items.find((user: any) => user.login.username == match.params.userName);
+
+    useEffect(() => {
+       if(photos.length > 0){
+        let photoIndex = photos.findIndex(p => p.filepath === user.login.username+".jpeg");
+        if(photoIndex >= 0){
+          dispatch(updateData(user, photos[photoIndex].webviewPath))
+        }
+       }
+    },[photos.length])
   
     return (
       <IonPage>
@@ -56,6 +71,11 @@ import {
               <IonCardSubtitle>Cell: {user.cell}</IonCardSubtitle>
            </IonCardContent>
           </IonCard>
+          <IonFab vertical="center" horizontal="end" slot="fixed">
+              <IonFabButton onClick={() => takePhoto(user.login.username)}>
+                <IonIcon icon={camera}></IonIcon>
+              </IonFabButton>
+          </IonFab>
         </IonContent>
       </IonPage>
     );
